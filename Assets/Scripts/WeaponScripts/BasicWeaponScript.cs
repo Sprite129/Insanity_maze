@@ -4,36 +4,63 @@ using UnityEngine.InputSystem;
 public class BasicWeapon : MonoBehaviour
 {
 	private Animator weaponAnimator;
-	private Collider2D collider;
+	private Collider2D damageCollider;
+
 	[SerializeField] private float damage = 20.0f;
+	[SerializeField] private float attackSpeed = 1f;
+	[SerializeField] private float inputBufferTime = 0.2f;
+
+	private float attackBufferTimer = 0f;
+	private bool canStrike = true;
 
 	private void Start()
 	{
 		weaponAnimator = GetComponent<Animator>();
-		collider = GetComponent<Collider2D>();
-		collider.enabled = false;
+		weaponAnimator.speed = this.attackSpeed;
+		damageCollider = GetComponent<Collider2D>();
+		damageCollider.enabled = false;
+	}
+
+	private void Update()
+	{
+		attackBufferTimer -= Time.deltaTime;
+
+		if (attackBufferTimer > 0f && canStrike) {
+			attackBufferTimer = 0f;
+			weaponAnimator.SetTrigger("Attack");
+		}
 	}
 
 	public void Attack()
 	{
-		weaponAnimator.SetTrigger("Attack");
+		attackBufferTimer = inputBufferTime;
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if(collision.CompareTag("Enemy"))
+		if (collision.CompareTag("Enemy"))
 		{
-			collision.gameObject.GetComponent<BasicEnemy>().takeDamage(this.damage);
+			collision.gameObject.GetComponent<BasicEnemy>().takeDamage(damage);
 		}
 	}
 
 	public void turnOnCollision()
 	{
-		this.collider.enabled = true;
+		damageCollider.enabled = true;
 	}
 
 	public void turnOffCollision()
 	{
-		this.collider.enabled = false;
+		damageCollider.enabled = false;
+	}
+
+	public void disableStrike()
+	{
+		this.canStrike = false;
+	}
+
+	public void enableStrike()
+	{
+		this.canStrike = true;
 	}
 }

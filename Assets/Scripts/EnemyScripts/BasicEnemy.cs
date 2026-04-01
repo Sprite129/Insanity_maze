@@ -6,15 +6,14 @@ public class BasicEnemy : MonoBehaviour
 
     public void takeDamage(float damage)
     {
-        this.enemyHealth -= damage;
+        enemyHealth -= damage;
 
         if (enemyHealth <= 0)
-            this.die();
+            die();
     }
 
     private void die()
     {
-        Debug.Log("I'm dead, bro");
         Destroy(gameObject);
     }
 }
