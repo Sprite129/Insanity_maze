@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Player_walk_left
+  m_Name: Idle_right
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -23,7 +23,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 103
@@ -42,14 +42,6 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 5229576361933122948, guid: 2dd06686d83d83943a7c9cdb1fb0d7f4, type: 3}
-    - time: 0.16666667
-      value: {fileID: -9013943025358570418, guid: 03fd2f92fe3932c46841318cf474ae0f, type: 3}
-    - time: 0.33333334
-      value: {fileID: -5754987593820362848, guid: efdfe4bc55f115f489ff3330ebeda8d8, type: 3}
-    - time: 0.5
-      value: {fileID: -6655415382565691241, guid: 046b58dc1e22ee544894c9bb64a192c2, type: 3}
-    - time: 0.6666667
       value: {fileID: 5229576361933122948, guid: 2dd06686d83d83943a7c9cdb1fb0d7f4, type: 3}
     attribute: m_Sprite
     path: 
@@ -83,16 +75,12 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
     - {fileID: 5229576361933122948, guid: 2dd06686d83d83943a7c9cdb1fb0d7f4, type: 3}
-    - {fileID: -9013943025358570418, guid: 03fd2f92fe3932c46841318cf474ae0f, type: 3}
-    - {fileID: -5754987593820362848, guid: efdfe4bc55f115f489ff3330ebeda8d8, type: 3}
-    - {fileID: -6655415382565691241, guid: 046b58dc1e22ee544894c9bb64a192c2, type: 3}
-    - {fileID: 5229576361933122948, guid: 2dd06686d83d83943a7c9cdb1fb0d7f4, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.68333334
+    m_StopTime: 0.016666668
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -114,7 +102,7 @@ AnimationClip:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0
         inSlope: Infinity
         outSlope: Infinity
         tangentMode: 103

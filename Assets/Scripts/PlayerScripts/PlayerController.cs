@@ -4,15 +4,23 @@ using UnityEngine.InputSystem;
 public class Player_controller : MonoBehaviour
 {
     [SerializeField] private float playerSpeed = 5.0f;
+    private float animationSpeed;
     private Rigidbody2D playerRigidbody;
     private Vector2 playerInput;
+    private Vector2 animationInput;
     [SerializeField] private Transform weaponSlot;
+    [SerializeField] private Animator animator;
     private BasicWeapon weapon;
     
     void Start()
     {
+        animationSpeed = playerSpeed / 5.0f;
+
 		playerRigidbody = GetComponent<Rigidbody2D>();
         weapon = weaponSlot.GetComponentInChildren<BasicWeapon>();
+        animator = GetComponent<Animator>();
+
+        animator.speed = animationSpeed;
     }
 
     void FixedUpdate()
@@ -23,8 +31,21 @@ public class Player_controller : MonoBehaviour
 
     public void Move(InputAction.CallbackContext inputContext)
     {
-        playerInput = inputContext.ReadValue<Vector2>();
-    }
+
+		animator.SetBool("isWalking", true);
+
+        if(inputContext.canceled)
+        {
+			animator.SetBool("isWalking", false);
+			animator.SetFloat("LastX", animationInput.x);
+			animator.SetFloat("LastY", animationInput.y);
+		}
+		playerInput = inputContext.ReadValue<Vector2>();
+		animationInput = new Vector2(Mathf.Round(playerInput.x), Mathf.Round(playerInput.y));
+
+		animator.SetFloat("X", animationInput.x);
+        animator.SetFloat("Y", animationInput.y);
+	}
 
     public void Attack(InputAction.CallbackContext inputContext)
     {
