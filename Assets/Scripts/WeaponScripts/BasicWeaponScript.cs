@@ -10,13 +10,14 @@ public class BasicWeapon : MonoBehaviour
 	[SerializeField] private float attackSpeed = 1f;
 	[SerializeField] private float inputBufferTime = 0.2f;
 
+	private Vector2 attackDirection;
 	private float attackBufferTimer = 0f;
 	private bool canStrike = true;
 
 	private void Start()
 	{
 		weaponAnimator = GetComponent<Animator>();
-		weaponAnimator.speed = this.attackSpeed;
+		weaponAnimator.speed = attackSpeed;
 		damageCollider = GetComponent<Collider2D>();
 		damageCollider.enabled = false;
 	}
@@ -27,6 +28,8 @@ public class BasicWeapon : MonoBehaviour
 
 		if (attackBufferTimer > 0f && canStrike) {
 			attackBufferTimer = 0f;
+			weaponAnimator.SetFloat("X", attackDirection.x);
+			weaponAnimator.SetFloat("Y", attackDirection.y);
 			weaponAnimator.SetTrigger("Attack");
 		}
 	}
@@ -62,5 +65,10 @@ public class BasicWeapon : MonoBehaviour
 	public void enableStrike()
 	{
 		this.canStrike = true;
+	}
+
+	public void setAttackDirection(Vector2 attackDirection)
+	{
+		this.attackDirection = attackDirection;
 	}
 }

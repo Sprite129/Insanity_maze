@@ -39,12 +39,17 @@ public class Player_controller : MonoBehaviour
 			animator.SetBool("isWalking", false);
 			animator.SetFloat("LastX", animationInput.x);
 			animator.SetFloat("LastY", animationInput.y);
+            weapon.setAttackDirection(animationInput);
 		}
 		playerInput = inputContext.ReadValue<Vector2>();
 		animationInput = new Vector2(Mathf.Round(playerInput.x), Mathf.Round(playerInput.y));
 
 		animator.SetFloat("X", animationInput.x);
         animator.SetFloat("Y", animationInput.y);
+
+
+        if(animationInput != Vector2.zero)
+			weapon.setAttackDirection(animationInput);
 	}
 
     public void Attack(InputAction.CallbackContext inputContext)
