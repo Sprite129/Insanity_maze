@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    public void TakeDamage(int damage)
+	public void TakeDamage(int damage)
     {
         currentHealth -= damage;
         currentHealth = Mathf.Max(currentHealth, 0);
@@ -23,6 +24,7 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         Debug.Log("Player died.");
+        Destroy(gameObject);
         // Тут можна додати логіку перезапуску, екран завершення гри тощо.
     }
 
