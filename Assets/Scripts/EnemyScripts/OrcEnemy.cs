@@ -25,8 +25,15 @@ public class OrcEnemy : BasicEnemy
         attackTimer = 0f;
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
     void Update()
     {
+        if (IsDead()) return;
+
         if (player == null)
         {
             animator?.SetBool("isRunning", false);
@@ -63,6 +70,7 @@ public class OrcEnemy : BasicEnemy
 
     void FixedUpdate()
     {
+        if (IsDead()) return;
         if (movement.sqrMagnitude > 0.001f)
         {
             Vector2 newPosition = rb.position + movement * speed * Time.fixedDeltaTime;
