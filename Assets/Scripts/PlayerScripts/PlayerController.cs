@@ -14,108 +14,111 @@ public class Player_controller : MonoBehaviour
     private Rigidbody2D playerRigidbody;
 
     private BasicWeapon weapon;
-	private WeaponPickup nearestWeapon;
+    private WeaponPickup nearestWeapon;
 
-	void Start()
+    void Start()
     {
         animationSpeed = playerSpeed / 5.0f;
 
-		playerRigidbody = GetComponent<Rigidbody2D>();
+        playerRigidbody = GetComponent<Rigidbody2D>();
         weapon = weaponSlot.GetComponentInChildren<BasicWeapon>();
         animator = GetComponent<Animator>();
 
         animator.speed = animationSpeed;
     }
 
+    void Update()
+    {
+        var kb = Keyboard.current;
+        if (kb == null) return;
+
+        // Move
+        Vector2 moveInput = Vector2.zero;
+        if (kb.wKey.isPressed || kb.upArrowKey.isPressed) moveInput.y += 1f;
+        if (kb.sKey.isPressed || kb.downArrowKey.isPressed) moveInput.y -= 1f;
+        if (kb.aKey.isPressed || kb.leftArrowKey.isPressed) moveInput.x -= 1f;
+        if (kb.dKey.isPressed || kb.rightArrowKey.isPressed) moveInput.x += 1f;
+
+        if (moveInput.sqrMagnitude > 1f)
+            moveInput.Normalize();
+
+        playerInput = moveInput;
+        animationInput = new Vector2(Mathf.Round(playerInput.x), Mathf.Round(playerInput.y));
+
+        if (moveInput.sqrMagnitude > 0.01f)
+        {
+            animator.SetBool("isWalking", true);
+            animator.SetFloat("X", animationInput.x);
+            animator.SetFloat("Y", animationInput.y);
+            weapon.setAttackDirection(animationInput);
+        }
+        else
+        {
+            animator.SetBool("isWalking", false);
+            animator.SetFloat("LastX", animationInput.x);
+            animator.SetFloat("LastY", animationInput.y);
+        }
+
+        // Attack
+        if (kb.spaceKey.wasPressedThisFrame || Mouse.current?.leftButton.wasPressedThisFrame == true)
+            weapon.Attack();
+
+        // Interact
+        if (kb.eKey.wasPressedThisFrame && nearestWeapon != null)
+        {
+            EquipWeapon(nearestWeapon.GetWeaponPrefab());
+            Destroy(nearestWeapon.gameObject);
+            nearestWeapon = null;
+        }
+    }
+
     void FixedUpdate()
     {
-        Vector2 newPosition = playerRigidbody.position + playerInput * playerSpeed * Time.fixedDeltaTime;
-		playerRigidbody.MovePosition(newPosition);
+        playerRigidbody.linearVelocity = playerInput * playerSpeed;
     }
 
-    public void Move(InputAction.CallbackContext inputContext)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-
-		animator.SetBool("isWalking", true);
-
-        if(inputContext.canceled)
+        if (collision.TryGetComponent<WeaponPickup>(out WeaponPickup pickup))
         {
-			animator.SetBool("isWalking", false);
-			animator.SetFloat("LastX", animationInput.x);
-			animator.SetFloat("LastY", animationInput.y);
-            weapon.setAttackDirection(animationInput);
-		}
-		playerInput = inputContext.ReadValue<Vector2>();
-		animationInput = new Vector2(Mathf.Round(playerInput.x), Mathf.Round(playerInput.y));
-
-		animator.SetFloat("X", animationInput.x);
-        animator.SetFloat("Y", animationInput.y);
-
-
-        if(animationInput != Vector2.zero)
-			weapon.setAttackDirection(animationInput);
-	}
-
-    public void Attack(InputAction.CallbackContext inputContext)
-    {
-        if(inputContext.started)
-            weapon.Attack();
+            nearestWeapon = pickup;
+        }
     }
 
-	private void OnTriggerEnter2D(Collider2D collision)
-	{
-		if (collision.TryGetComponent<WeaponPickup>(out WeaponPickup pickup))
-		{
-			nearestWeapon = pickup;
-		}
-	}
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent<WeaponPickup>(out WeaponPickup pickup))
+        {
+            if (nearestWeapon == pickup)
+            {
+                nearestWeapon = null;
+            }
+        }
+    }
 
-	private void OnTriggerExit2D(Collider2D collision)
-	{
-		if (collision.TryGetComponent<WeaponPickup>(out WeaponPickup pickup))
-		{
-			if (nearestWeapon == pickup)
-			{
-				nearestWeapon = null;
-			}
-		}
-	}
+    private void EquipWeapon(GameObject newPrefab)
+    {
+        if (weaponSlot == null)
+        {
+            weaponSlot = transform.Find("WeaponHolder");
+        }
 
-	private void EquipWeapon(GameObject newPrefab)
-	{
-		if (weaponSlot == null)
-		{
-			weaponSlot = transform.Find("WeaponHolder");
-		}
+        foreach (Transform child in weaponSlot)
+        {
+            Destroy(child.gameObject);
+        }
 
-		foreach (Transform child in weaponSlot)
-		{
-			Destroy(child.gameObject);
-		}
+        GameObject newWeaponObj = Instantiate(newPrefab, weaponSlot);
 
-		GameObject newWeaponObj = Instantiate(newPrefab, weaponSlot);
+        newWeaponObj.transform.localPosition = Vector3.zero;
+        newWeaponObj.transform.localRotation = Quaternion.identity;
+        newWeaponObj.transform.localScale = Vector3.one;
 
-		newWeaponObj.transform.localPosition = Vector3.zero;
-		newWeaponObj.transform.localRotation = Quaternion.identity;
-		newWeaponObj.transform.localScale = Vector3.one;
+        weapon = newWeaponObj.GetComponent<BasicWeapon>();
 
-		weapon = newWeaponObj.GetComponent<BasicWeapon>();
-
-		if (weapon != null)
-		{
-			weapon.setAttackDirection(animationInput);
-		}
-	}
-
-	public void Interact(InputAction.CallbackContext inputContext)
-	{
-		if (inputContext.started && nearestWeapon != null)
-		{
-			Debug.Log(nearestWeapon);
-			EquipWeapon(nearestWeapon.GetWeaponPrefab());
-
-			Destroy(nearestWeapon.gameObject);
-			nearestWeapon = null;
-		}
-	}
+        if (weapon != null)
+        {
+            weapon.setAttackDirection(animationInput);
+        }
+    }
 }

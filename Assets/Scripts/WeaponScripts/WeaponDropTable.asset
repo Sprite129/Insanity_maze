@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9cd8c79a8e2d4cff9768462637fa6b8, type: 3}
+  m_Name: WeaponDropTable
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponDropTable
+  weapons:
+  - pickupPrefab: {fileID: 6329140188109704174, guid: 7fd35ae8d37f722478b916e163dcefc4, type: 3}
+    dropChance: 40
+  - pickupPrefab: {fileID: 6329140188109704174, guid: 5cb557f5db159c04b84596af9c4bf06b, type: 3}
+    dropChance: 25
+  - pickupPrefab: {fileID: 6329140188109704174, guid: a7a07241cb8d6fe4787816e4644415b4, type: 3}
+    dropChance: 20
+  - pickupPrefab: {fileID: 6329140188109704174, guid: 7deb063f2d65b29449ee9eee6cf56b44, type: 3}
+    dropChance: 10
+  - pickupPrefab: {fileID: 6329140188109704174, guid: 446f32754476ca54ba1bb5981db15233, type: 3}
+    dropChance: 5
+  overallDropChance: 40
